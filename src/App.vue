@@ -1,24 +1,28 @@
 <template>
-   <div>
+   <v-ons-page>
       <AppToolbar>
-        <template slot="left"></template>   
+        <template slot="left"></template>  
+                     
         <template slot="right"></template>
-      </AppToolbar>
-   </div>
+      </AppToolbar>    
+      <AppSearch class="center" :query.sync="query" />   
+   </v-ons-page>
 </template>
 <script>
 
 import AppToolbar from './components/AppToolbar.vue'
+import AppSearch from './components/AppSearch.vue'
 export default{
     components: {
-      AppToolbar
+      AppToolbar,
+      AppSearch
     },
 
-  /*  data() {
+    data() {
       return {
-        title: 'Github App'
+        query:''
       };
-    }*/
+    }
    /* data() {
       return {
         title: 'My app'
