@@ -12,6 +12,8 @@
 
 import AppToolbar from './components/AppToolbar.vue'
 import AppSearch from './components/AppSearch.vue'
+import debounce from 'lodash/debounce'
+import {github} from './services/Github'
 export default{
     components: {
       AppToolbar,
@@ -20,8 +22,19 @@ export default{
 
     data() {
       return {
-        query:''
+        query:'',
+        repositories:[]
       };
+    },
+
+    watch: {
+        query: debounce(function(newValue) {
+            github.getRepos(this.query).
+            then((response) => {
+            this.repositories = response.data
+            console.log(this.repositories)
+           })
+        }, 500)
     }
    /* data() {
       return {

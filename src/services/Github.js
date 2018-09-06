@@ -2,11 +2,11 @@ import axios from 'axios'
 
 export default class Github {
     constructor () {
-      axios.defaults.baseURL = `https://api.github.com`
+      axios.defaults.baseURL = 'https://api.github.com/'
     }
   
     getRepos(username) {
-      return axios.get(`/users/${username}/repos`)
+      return axios.get(`users/${username}/repos`)
     }
 
   }
