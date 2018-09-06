@@ -1,8 +1,8 @@
 <template>
    <div>
       <AppToolbar>
-        <template slot="left">Slot1</template>   
-        <template slot="right">Slot2</template>
+        <template slot="left"></template>   
+        <template slot="right"></template>
       </AppToolbar>
    </div>
 </template>
