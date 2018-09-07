@@ -6,7 +6,7 @@
       </app-toolbar>   
       <div class="center">
         <app-search class="center" :query.sync="query" />   
-        <div v-if="repositories.length">
+        <div v-if="repositories.length && query!='' && !loading">
           <v-ons-list >
             <v-ons-list-header>
                 Repositories of {{ query }}
@@ -22,8 +22,16 @@
             </v-ons-list-item>
           </v-ons-list>
         </div>
+        <div v-else-if="status!==404 && query!='' && !loading">
+           <empty-state type="repository" />
+        </div>
+        <div v-else-if="query!=='' && !loading">
+           <not-found />
+        </div>
+        <div v-else-if="loading">          
+           
+        </div>     
         <div v-else>
-          <empty-state type="repository" />
         </div>
         <v-ons-progress-circular indeterminate v-if="loading"> </v-ons-progress-circular indeterminate>
       </div> 
@@ -35,20 +43,23 @@
 import AppToolbar from './components/AppToolbar.vue'
 import AppSearch from './components/AppSearch.vue'
 import EmptyState from './components/EmptyState.vue'
+import NotFound from './components/NotFound.vue'
 import debounce from 'lodash/debounce'
 import {github} from './services/Github'
 export default{
     components: {
       AppToolbar,
       AppSearch,
-      EmptyState
+      EmptyState,
+      NotFound
     },
 
     data() {
       return {
         query:'',
         repositories:[],
-        loading:false
+        loading:false,
+        status:''
       };
     },
 
@@ -59,7 +70,7 @@ export default{
             then((response) => {
             this.repositories = response.data
             console.log(this.repositories)
-           }).catch(error => {})
+           }).catch(error => {this.status = error.response.status})
            .finally(() => {this.loading = false})
         }, 500)
     }
