@@ -3,7 +3,8 @@
       <AppToolbar>
         <template slot="left"></template>                       
         <template slot="right"></template>
-      </AppToolbar>    
+      </AppToolbar>   
+      <div class="center">
       <AppSearch class="center" :query.sync="query" />   
       <div v-if="repositories.length">
         <v-ons-list >
@@ -24,6 +25,9 @@
       <div v-else>
         No repositories
       </div>
+       <v-ons-progress-circular indeterminate v-if="loading"> </v-ons-progress-circular indeterminate>
+      </div> 
+      
    </v-ons-page>
 </template>
 
@@ -41,17 +45,20 @@ export default{
     data() {
       return {
         query:'',
-        repositories:[]
+        repositories:[],
+        loading:false
       };
     },
 
     watch: {
         query: debounce(function(newValue) {
+            this.loading = true;
             github.getRepos(this.query).
             then((response) => {
             this.repositories = response.data
             console.log(this.repositories)
-           })
+           }).catch(error => {})
+           .finally(() => {this.loading = false})
         }, 500)
     }
    /* data() {
